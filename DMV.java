@@ -3,7 +3,7 @@ import java.util.concurrent.Semaphore;
 // Main class that handles all transactions, holds semaphores, etc.
 public class DMV {
 
-    private static Customer[] customerArr;
+    private static Thread[] customerArr;
     /*
      * Semaphores
      *  - 1st parameter is the default number of Semaphores available
@@ -16,41 +16,37 @@ public class DMV {
     public static Semaphore customerInfoDeskReady = new Semaphore(0,true);
     // Variables used by Information Desk to assign customer a number
     public static void main(String[] args){
-        // Creates Information Desk thread
+        // Creates Information Desk Runnable Object
         InformationDesk informationDesk = new InformationDesk();
 
-        // Creates Announcer Thread
+        // Creates Announcer "Runnable Object"
         Announcer announcer = new Announcer();
 
-        // Creates Agents thread
+        // Creates Agents "Runnable Object"
         //  2 Agents required
-        Agent agentZero = new Agent(0);
-        Agent agentOne = new Agent(1);
-
-        /*
-         * Create 20 Customer threads, storing their ID in customerArray
-         *  Customers in customerArr are stored from 1-20
-         */
-        customerArr = new Customer[21];
-        for(int i = 1; i <= 20; i++){
-            // Creates customer object, storing Id "i" for customer
-            Customer cust = new Customer(i);
-            // Stores customer with ID in customer array
-            customerArr[i] = cust;
-        }
+        Agent agent0 = new Agent(0);
+        Agent agent1 = new Agent(1);
 
         /**
          * Start all threads, in order of Information Desk, Announcer, Agents.
          *  Customers started after all 3 above started, and starting DMV process.
          */
-        informationDesk.start();
-        announcer.start();
-        agentZero.start();
-        agentOne.start();
+        Thread infoDesk = new Thread(informationDesk);
+        Thread announce = new Thread(announcer);
+        Thread agentZero = new Thread(agent0);
+        Thread agentOne = new Thread(agent1);
 
+        /*
+         * Create 20 Customer runnable objects and, storing their ID in customerArray
+         *  Customers in customerArr are stored from 1-20. Also starts the customer threads.
+         */
+        customerArr = new Thread[21];
         for(int i = 1; i <= 20; i++){
-            customerArr[i].start();
-        }
-
+            // Creates customer object, storing Id "i" for customer
+            Customer cust = new Customer(i);
+            Thread custom = new Thread(cust);
+            // Stores customer with ID in customer array
+            customerArr[i] = custom;
+        }   
     }
 }
