@@ -13,9 +13,12 @@ public class DMV {
      */
 
     // informationDeskReady will be used when the Info Desk is ready to acquire a customer
-    public static Semaphore informationDesk = new Semaphore(1,true);
+    public static Semaphore informationDeskReady = new Semaphore(0,true);
+    public static Semaphore customerInfoDeskReady = new Semaphore(0,true);
+    public static Semaphore infoDeskComplete = new Semaphore(0,true);
     // Variables used by Information Desk to assign customer a number
-    //public static int[] customerNumber = new int[21];
+    public static int[] customerNumber = new int[21];
+    public static int customerAtInfoDesk;
 
 
     public static void main(String[] args){

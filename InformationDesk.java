@@ -5,16 +5,18 @@ public class InformationDesk implements Runnable{
 
     @Override
     public void run(){
-        System.out.println("Information desk created.");
-        boolean test_bool = true;
-        int test = 0;
-        // Information Desk is open until DMV closes the station
-        while(test_bool){
-            System.out.println("info desk doing stuff");
-            if(test == 20){
-                return;
+        try{
+            boolean taco = true;
+            while(taco){
+                DMV.informationDeskReady.release();
+                DMV.customerInfoDeskReady.acquire();
+                System.out.println("Assigning " + currNumber + " to customer " + DMV.customerAtInfoDesk);
+                currNumber++;
+                DMV.informationDeskReady.acquire();
+                taco = currNumber >= 20 ? false : true;
             }
-            test += 1;
+        } catch (InterruptedException e){
+            e.printStackTrace();
         }
     }
 }
