@@ -8,6 +8,10 @@ public class Customer implements Runnable {
         this.customerId = custNum;
     }
 
+    public int getId(){
+        return customerId;
+    }
+
     @Override
     public void run(){
         /*

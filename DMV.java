@@ -15,6 +15,7 @@ public class DMV {
     public static Semaphore informationDeskReady = new Semaphore(0,true);
     public static Semaphore customerInfoDeskReady = new Semaphore(0,true);
     // Variables used by Information Desk to assign customer a number
+    public static int[] customerNumber = new int[21];
     public static void main(String[] args){
         // Creates Information Desk Runnable Object
         InformationDesk informationDesk = new InformationDesk();
@@ -35,6 +36,10 @@ public class DMV {
         Thread announce = new Thread(announcer);
         Thread agentZero = new Thread(agent0);
         Thread agentOne = new Thread(agent1);
+        infoDesk.start();
+        announce.start();
+        agentZero.start();
+        agentOne.start();
 
         /*
          * Create 20 Customer runnable objects and, storing their ID in customerArray
@@ -47,6 +52,18 @@ public class DMV {
             Thread custom = new Thread(cust);
             // Stores customer with ID in customer array
             customerArr[i] = custom;
-        }   
+            custom.start();
+        }
+
+        /*
+        infoDesk.interrupt();
+        announce.interrupt();
+        agentZero.interrupt();
+        agentOne.interrupt();
+
+        for(int i = 1; i <= 20; i++){
+            customerArr[i].interrupt(); 
+        }
+        */
     }
 }
