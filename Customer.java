@@ -1,5 +1,5 @@
-public class Customer extends Thread {
-    private int customerId;
+public class Customer implements Runnable {
+    public int customerId;
     /*
      * Stores value of customer id in thread
      * @param custNum - customer Id passed in from Customer object
@@ -7,6 +7,7 @@ public class Customer extends Thread {
     public Customer (int custNum){
         this.customerId = custNum;
     }
+
     @Override
     public void run(){
         /*
@@ -19,5 +20,8 @@ public class Customer extends Thread {
             e.printStackTrace();
         }
         System.out.println("Customer " + customerId + " created, enters DMV.");
+
+        // Customer joins line at the Information Desk
+        DMV.customerInfoDeskReady.release();
     }
 }

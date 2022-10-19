@@ -1,4 +1,4 @@
-public class Announcer extends Thread{
+public class Announcer implements Runnable{
     public Announcer(){}
     @Override
     public void run(){
