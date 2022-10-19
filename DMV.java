@@ -13,9 +13,12 @@ public class DMV {
      // informationDeskReady will be used when the Info Desk is ready to acquire a customer
      //  customerReady will also be used when Customer is ready at Info Desk
     public static Semaphore informationDeskReady = new Semaphore(0,true);
-    public static Semaphore customerInfoDeskReady = new Semaphore(0,true);
+    //public static Semaphore customerInfoDeskReady = new Semaphore(0,true);
+    public static Semaphore informationDeskDone = new Semaphore(0,true);
     // Variables used by Information Desk to assign customer a number
     public static int[] customerNumber = new int[21];
+
+
     public static void main(String[] args){
         // Creates Information Desk Runnable Object
         InformationDesk informationDesk = new InformationDesk();
@@ -55,8 +58,9 @@ public class DMV {
             custom.start();
         }
 
-        /*
+
         infoDesk.interrupt();
+        /* 
         announce.interrupt();
         agentZero.interrupt();
         agentOne.interrupt();

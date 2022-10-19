@@ -26,6 +26,21 @@ public class Customer implements Runnable {
         System.out.println("Customer " + customerId + " created, enters DMV.");
 
         // Customer joins line at the Information Desk
-        DMV.customerInfoDeskReady.release();
+        //DMV.customerInfoDeskReady.release();
+        try{
+            DMV.informationDeskReady.acquire();
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+
+        
+        // Customer will wait until the transaction with transaction desk is done
+        try {
+            DMV.informationDeskDone.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+        System.out.println("Customer " + customerId + ": has number " + DMV.customerNumber[customerId]);
     }
 }
