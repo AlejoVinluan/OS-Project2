@@ -6,51 +6,15 @@ public class InformationDesk implements Runnable{
     @Override
     public void run(){
         System.out.println("Information desk created.");
-
+        boolean test_bool = true;
+        int test = 0;
         // Information Desk is open until DMV closes the station
-        while(true){
-            // Information Desk is stating that they are ready to accept a customer
-            DMV.informationDeskReady.release();
-            System.out.println(Thread.currentThread().getName());
-            // Attempt to receive a customer
-            /*
-            int custId = Math.toIntExact(Thread.currentThread().getId());
-            System.out.println(custId);
-            */
-            // Assign the current number to the current thread
-            //System.out.println("Assigning number " + currNumber + " to customer " + custId);
-
-            // Store this number in the DMV's customerNumber array.
-            //  array[Customer ID] = Current Number
-            //DMV.customerNumber[custId] = currNumber;
-
-            // Increment number so next customer will receive the next subsequent number
-            currNumber++;
-
-            // Informs customer that the transaction has completed
-            DMV.informationDeskDone.release();
-            /* 
-            try {
-                DMV.customerInfoDeskReady.acquire();
-                // Find ID of customer at Information Desk
-                int custId = Math.toIntExact(Thread.currentThread().getId());
-                System.out.println(custId);
-                // Assign the current number to the current thread
-                //System.out.println("Assigning number " + currNumber + " to customer " + custId);
-
-                // Store this number in the DMV's customerNumber array.
-                //  array[Customer ID] = Current Number
-                DMV.customerNumber[custId] = currNumber;
-
-                // Increment number so next customer will receive the next subsequent number
-                currNumber++;
-
-                // Informs customer that the transaction has completed
-                DMV.informationDeskDone.release();
-            }  catch (InterruptedException e) {
-                e.printStackTrace();
+        while(test_bool){
+            System.out.println("info desk doing stuff");
+            if(test == 20){
+                return;
             }
-            */
+            test += 1;
         }
     }
 }

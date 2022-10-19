@@ -3,20 +3,19 @@ import java.util.concurrent.Semaphore;
 // Main class that handles all transactions, holds semaphores, etc.
 public class DMV {
 
+    // Customer array to handle all 20 customers
     private static Thread[] customerArr;
+
     /*
      * Semaphores
      *  - 1st parameter is the default number of Semaphores available
      *  - 2nd parameter is a boolean to allow Threads to acquire semaphores in FIFO manner
      */
 
-     // informationDeskReady will be used when the Info Desk is ready to acquire a customer
-     //  customerReady will also be used when Customer is ready at Info Desk
-    public static Semaphore informationDeskReady = new Semaphore(0,true);
-    //public static Semaphore customerInfoDeskReady = new Semaphore(0,true);
-    public static Semaphore informationDeskDone = new Semaphore(0,true);
+    // informationDeskReady will be used when the Info Desk is ready to acquire a customer
+    public static Semaphore informationDesk = new Semaphore(1,true);
     // Variables used by Information Desk to assign customer a number
-    public static int[] customerNumber = new int[21];
+    //public static int[] customerNumber = new int[21];
 
 
     public static void main(String[] args){
@@ -56,6 +55,14 @@ public class DMV {
             // Stores customer with ID in customer array
             customerArr[i] = custom;
             custom.start();
+        }
+
+        for(int i = 1; i <= 20; i++){
+            try {
+                customerArr[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
 
