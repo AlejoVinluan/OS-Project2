@@ -26,14 +26,23 @@ public class Customer implements Runnable {
 
         System.out.println("Customer " + customerId + " created, enters DMV.");
         try{
-            DMV.informationDeskReady.acquire();
+            // Inform the Information Desk that a customer is ready for the transaction
             DMV.customerInfoDeskReady.release();
+
+            // Customer proceeds to information d esk
+            DMV.informationDeskReady.acquire();
             System.out.println(customerId + " goes to information desk.");
+
+            // Inform the information desk which customer is currently there
+
             DMV.customerAtInfoDesk = customerId;
-            // Customer leaves info desk
-            DMV.infoDeskComplete.release();
+
+            // Customer waits until Information desk transaction has completed
+            DMV.infoDeskComplete.acquire();
         } catch (InterruptedException e){
-            e.printStackTrace();
+            System.out.println("Customer failed at Information Desk stage. " + e);
         }
+
+        
     }
 }

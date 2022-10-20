@@ -13,12 +13,18 @@ public class DMV {
      */
 
     // informationDeskReady will be used when the Info Desk is ready to acquire a customer
+    // customerInfoDeskReady will be used when a Customer is ready to utilize the Information Desk
+    // infoDeskComplete will be used to acknowledge both parties are complete in their transaction
     public static Semaphore informationDeskReady = new Semaphore(0,true);
     public static Semaphore customerInfoDeskReady = new Semaphore(0,true);
     public static Semaphore infoDeskComplete = new Semaphore(0,true);
-    // Variables used by Information Desk to assign customer a number
+    // customerNumber is used to attach a customer's number to their id 
+    //  (customer 1's number will be stored in customerNumber[1])
+    // customerAtInfoDesk points to which customer is currently at the Information Desk
     public static int[] customerNumber = new int[21];
     public static int customerAtInfoDesk;
+    
+    // Waiting area Semaphore displays 
 
 
     public static void main(String[] args){
@@ -68,9 +74,8 @@ public class DMV {
             }
         }
 
-
-        infoDesk.interrupt();
-        /* 
+        /*
+        infoDesk.interrupt(); 
         announce.interrupt();
         agentZero.interrupt();
         agentOne.interrupt();
