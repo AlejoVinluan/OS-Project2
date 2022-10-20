@@ -1,3 +1,8 @@
+/*
+ * Information Desk has 1 role - assign number sequentially to each customer
+ *  Each number is stored in DMV.customerNumber
+ */
+
 public class InformationDesk implements Runnable{
     // Current number is used to assign number to Customer Thread
     private static int currNumber; 
@@ -14,7 +19,7 @@ public class InformationDesk implements Runnable{
                 
                 // Assigns a number to the customer, storing in "customerNumber" array
                 System.out.println("Assigning " + currNumber + " to customer " + DMV.customerAtInfoDesk);
-
+                DMV.customerNumber[DMV.customerAtInfoDesk] = currNumber;
                 // Increment the current number for the next customer
                 currNumber++;
 

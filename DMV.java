@@ -24,7 +24,17 @@ public class DMV {
     public static int[] customerNumber = new int[21];
     public static int customerAtInfoDesk;
     
-    // Waiting area Semaphore displays 
+    // "Waiting Area"
+    public static int waitingAreaNumber = 1; 
+
+    // General Agent semaphore so that an agent may call when they're ready
+    public static Semaphore agentAvailableSemaphore = new Semaphore(0,true);
+    // agentSemaphore is a semaphore for each agent to state they're available
+    public static Semaphore[] agentSemaphore = new Semaphore[]{
+        new Semaphore(0,true),
+        new Semaphore(0,true)
+    };
+    public static Semaphore customerAgentReady = new Semaphore(0, true);
 
 
     public static void main(String[] args){
