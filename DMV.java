@@ -22,7 +22,7 @@ public class DMV {
     //  (customer 1's number will be stored in customerNumber[1])
     // customerAtInfoDesk points to which customer is currently at the Information Desk
     //  Stored as "[0, 13, 14....., 3]" where Customer 1 is #13, Customer 2 is #14, etc.
-    public static int[] customerNumber = new int[21];
+    public static int[] customerNumber = new int[22];
     public static int customerAtInfoDesk;
     
     // Waiting area Semaphore displays
@@ -70,7 +70,7 @@ public class DMV {
          * Create 20 Customer runnable objects and, storing their ID in customerArray
          *  Customers in customerArr are stored from 1-20. Also starts the customer threads.
          */
-        /*
+
         customerArr = new Thread[21];
         for(int i = 1; i <= 20; i++){
             // Creates customer object, storing Id "i" for customer
@@ -81,6 +81,7 @@ public class DMV {
             custom.start();
         }
 
+        /*
         for(int i = 1; i <= 20; i++){
             try {
                 customerArr[i].join();
@@ -89,6 +90,7 @@ public class DMV {
             }
         }
         */
+
         Customer cust = new Customer(1);
         Thread custom = new Thread(cust);
         customerArr = new Thread[2];

@@ -3,8 +3,6 @@ import java.util.Random;
 
 public class Customer implements Runnable {
 
-    private Random rand;
-
     public int customerId;
     /*
      * Stores value of customer id in thread
@@ -78,7 +76,6 @@ public class Customer implements Runnable {
             System.out.println("Customer " + customerId + " gets license and departs.");
 
             DMV.agentComplete.acquire();
-            System.out.println("Customer " + customerId + ":agentComplete DONE");
         } catch (InterruptedException e){
             System.out.println("Customer failed at Information Desk stage. " + e);
         }

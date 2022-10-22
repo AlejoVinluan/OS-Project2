@@ -14,7 +14,6 @@ public class Announcer implements Runnable{
 
                 DMV.waitingAreaComplete.acquire();
                 DMV.waitingAreaNumber++;
-                if(DMV.waitingAreaNumber == 2){break;}
             }
         } catch (InterruptedException e){
             System.out.println("Announcer failed. " + e);

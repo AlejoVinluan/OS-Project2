@@ -11,13 +11,11 @@ public class Agent implements Runnable{
         try{
             while(true){
                 DMV.agentReady.release();
-                System.out.println("AgentReady RELEASE");
                 DMV.agentSemaphore[id].release();
                 DMV.customerAgentReady.acquire();
 
 
                 DMV.agentComplete.release();
-                System.out.println("AgentComplete DONE2");
             }
         } catch (InterruptedException e){
             System.out.println("Agent failed. " + e);
