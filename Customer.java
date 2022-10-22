@@ -1,4 +1,10 @@
+// Used to simulate waiting times
+import java.util.Random;
+
 public class Customer implements Runnable {
+
+    private Random rand;
+
     public int customerId;
     /*
      * Stores value of customer id in thread
@@ -19,12 +25,16 @@ public class Customer implements Runnable {
          *  gives the Information Desk, Announcer, and Agent threads time to start.
          */
         try {
-            Thread.sleep(1000);
+            Thread.sleep(rand.nextInt((5000-1000) + 1) + 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         System.out.println("Customer " + customerId + " created, enters DMV.");
+
+        /*
+         * Information Desk transaction in try/catch block below.
+         */
         try{
             // Inform the Information Desk that a customer is ready for the transaction
             DMV.customerInfoDeskReady.release();
@@ -53,6 +63,16 @@ public class Customer implements Runnable {
         } catch (InterruptedException e){
             System.out.println("Customer failed at Information Desk stage. " + e);
         }
+
+        /*
+         * General format for Announcer stage 
+         *  1) Obtain Announcer Semaphore
+         *  2) Wait until Agent is ready
+         *  3) Join Agent stage
+         *  4) Release announcer semaphore
+         */
+        
+         
 
         
     }
