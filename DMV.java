@@ -31,6 +31,15 @@ public class DMV {
     public static Semaphore waitingAreaComplete = new Semaphore(0,true);
     public static int waitingAreaNumber = 1;
 
+    // Agent Semahpores
+    public static Semaphore agentReady = new Semaphore(0,true);
+    public static Semaphore[] agentSemaphore = new Semaphore[]{
+        new Semaphore(0,true),
+        new Semaphore(0,true)
+    };
+    public static Semaphore customerAgentReady = new Semaphore(0,true);
+    public static Semaphore agentComplete = new Semaphore(0, true);
+
 
     public static void main(String[] args){
         // Creates Information Desk Runnable Object

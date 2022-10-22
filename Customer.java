@@ -25,7 +25,7 @@ public class Customer implements Runnable {
          *  gives the Information Desk, Announcer, and Agent threads time to start.
          */
         try {
-            Thread.sleep(rand.nextInt((5000-1000) + 1) + 1000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -56,24 +56,20 @@ public class Customer implements Runnable {
                 Thread.sleep(1000);
             }
             DMV.waitingAreaReady.acquire();
-            // Customer waits for Agent to be raedy.
+            // Customer waits for Agent to be ready.
             // DMV.agentReady.acquire();
+
+            DMV.agentReady.acquire();
+            System.out.println("Customer " + customerId + ":AgentReady ACQUIRE");
             DMV.waitingAreaComplete.release();
-            
+            DMV.customerAgentReady.release();
+
+
+            DMV.agentComplete.acquire();
+            System.out.println("Customer " + customerId + ":agentComplete DONE");
         } catch (InterruptedException e){
             System.out.println("Customer failed at Information Desk stage. " + e);
         }
-
-        /*
-         * General format for Announcer stage 
-         *  1) Obtain Announcer Semaphore
-         *  2) Wait until Agent is ready
-         *  3) Join Agent stage
-         *  4) Release announcer semaphore
-         */
-        
-         
-
-        
+   
     }
 }

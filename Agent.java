@@ -10,15 +10,17 @@ public class Agent implements Runnable{
         System.out.println("Agent " + this.id + " created.");
         try{
             while(true){
-                DMV.agentAvailableSemaphore.release();
+                DMV.agentReady.release();
+                System.out.println("AgentReady RELEASE");
                 DMV.agentSemaphore[id].release();
+                DMV.customerAgentReady.acquire();
+
+
+                DMV.agentComplete.release();
+                System.out.println("AgentComplete DONE2");
             }
         } catch (InterruptedException e){
             System.out.println("Agent failed. " + e);
         }
-
-
     }
-
-
 }
