@@ -11,7 +11,8 @@ public class InformationDesk implements Runnable{
     @Override
     public void run(){
         try{
-            while(true){
+            boolean infoDeskOpen = true;
+            while(infoDeskOpen){
                 // Information Desk announces they're ready
                 DMV.informationDeskReady.release();
                 // Information Desk takes next customer in line
@@ -26,7 +27,7 @@ public class InformationDesk implements Runnable{
 
                 // Inform customer that the transaction has completed
                 DMV.infoDeskComplete.release();
-
+                if(currNumber > 21){System.exit(0);}
             }
         } catch (InterruptedException e){
             System.out.println("Information desk failed. " + e);

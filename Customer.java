@@ -43,7 +43,6 @@ public class Customer implements Runnable {
 
             // Inform the information desk which customer is currently there
             DMV.customerAtInfoDesk = customerId;
-
             // Customer waits until Information desk transaction has completed
             DMV.infoDeskComplete.acquire();
 
