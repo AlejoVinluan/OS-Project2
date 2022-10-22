@@ -64,6 +64,18 @@ public class Customer implements Runnable {
             DMV.waitingAreaComplete.release();
             DMV.customerAgentReady.release();
 
+            int agent;
+            if(DMV.agentSemaphore[0].tryAcquire()){
+                agent = 0;
+            } else {
+                DMV.agentSemaphore[1].acquire();
+                agent = 1;
+            }
+
+            System.out.println("Agent " + agent + " serving customer " + customerId);
+            System.out.println("Agent " + agent + " asks customer " + customerId + " to take photo and eye exam.");
+            System.out.println("Customer " + customerId + " completes photo and eye exam.");
+            System.out.println("Customer " + customerId + " gets license and departs.");
 
             DMV.agentComplete.acquire();
             System.out.println("Customer " + customerId + ":agentComplete DONE");
