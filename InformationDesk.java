@@ -13,9 +13,10 @@ public class InformationDesk implements Runnable{
                 DMV.customerInfoDeskReady.acquire();
                 
                 // Assigns a number to the customer, storing in "customerNumber" array
-                System.out.println("Assigning " + currNumber + " to customer " + DMV.customerAtInfoDesk);
+                System.out.println("Customer " + DMV.customerAtInfoDesk + " gets number " + currNumber + ", enters waiting room.");
 
                 // Increment the current number for the next customer
+                DMV.customerNumber[currNumber] = DMV.customerAtInfoDesk;
                 currNumber++;
 
                 // Inform customer that the transaction has completed

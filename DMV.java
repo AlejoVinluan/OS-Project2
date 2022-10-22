@@ -21,10 +21,15 @@ public class DMV {
     // customerNumber is used to attach a customer's number to their id 
     //  (customer 1's number will be stored in customerNumber[1])
     // customerAtInfoDesk points to which customer is currently at the Information Desk
+    //  Stored as "[0, 13, 14....., 3]" where Customer 1 is #13, Customer 2 is #14, etc.
     public static int[] customerNumber = new int[21];
     public static int customerAtInfoDesk;
     
-    // Waiting area Semaphore displays 
+    // Waiting area Semaphore displays
+    public static Semaphore waitingAreaReady = new Semaphore(3,true);
+    public static Semaphore customerWaitingAreaReady = new Semaphore(0,true);
+    public static Semaphore waitingAreaComplete = new Semaphore(0,true);
+    public static int waitingAreaNumber = 1;
 
 
     public static void main(String[] args){
@@ -56,6 +61,7 @@ public class DMV {
          * Create 20 Customer runnable objects and, storing their ID in customerArray
          *  Customers in customerArr are stored from 1-20. Also starts the customer threads.
          */
+        /*
         customerArr = new Thread[21];
         for(int i = 1; i <= 20; i++){
             // Creates customer object, storing Id "i" for customer
@@ -73,6 +79,12 @@ public class DMV {
                 e.printStackTrace();
             }
         }
+        */
+        Customer cust = new Customer(1);
+        Thread custom = new Thread(cust);
+        customerArr = new Thread[2];
+        customerArr[1] = custom;
+        custom.start();
 
         /*
         infoDesk.interrupt(); 
