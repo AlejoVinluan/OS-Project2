@@ -34,10 +34,11 @@ public class Customer implements Runnable {
          * Information Desk transaction in try/catch block below.
          */
         try{
+            DMV.infoDeskLine.add(this);
             // Inform the Information Desk that a customer is ready for the transaction
             DMV.customerInfoDeskReady.release();
 
-            // Customer proceeds to information d esk
+            // Customer proceeds to information desk
             DMV.informationDeskReady.acquire();
             System.out.println(customerId + " goes to information desk.");
 

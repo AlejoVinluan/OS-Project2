@@ -17,6 +17,9 @@ public class InformationDesk implements Runnable{
                 DMV.informationDeskReady.release();
                 // Information Desk takes next customer in line
                 DMV.customerInfoDeskReady.acquire();
+
+                Customer curr = DMV.infoDeskLine.remove();
+                System.out.println("Info desk has customer: " + curr.getId());
                 
                 // Assigns a number to the customer, storing in "customerNumber" array
                 System.out.println("Assigning " + currNumber + " to customer " + DMV.customerAtInfoDesk);
