@@ -4,6 +4,7 @@ public class Announcer implements Runnable{
     public void run(){
         System.out.println("Announcer created.");
 
+        /*
         try{
             while(true){
                 System.out.println("Announcer calls number " + DMV.waitingAreaNumber);
@@ -15,8 +16,10 @@ public class Announcer implements Runnable{
                 DMV.waitingAreaComplete.acquire();
                 DMV.waitingAreaNumber++;
             }
+            
         } catch (InterruptedException e){
             System.out.println("Announcer failed. " + e);
         }
+        */
     }
 }
