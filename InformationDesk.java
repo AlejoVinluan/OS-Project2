@@ -5,7 +5,7 @@
 
 public class InformationDesk implements Runnable{
     // Current number is used to assign number to Customer Thread
-    private static int currNumber; 
+    private static int currNumber;
     public InformationDesk(){currNumber = 1;}
 
     @Override
@@ -18,16 +18,13 @@ public class InformationDesk implements Runnable{
                 // Information Desk takes next customer in line
                 DMV.customerInfoDeskReady.acquire();
                 
+                Customer currCustomer = DMV.infoDeskLine.remove();
+                System.out.println("Customer " + currCustomer.getId() + " gets number " + currNumber + ", enters waiting room");
+                
                 // Assigns a number to the customer, storing in "customerNumber" array
-                System.out.println("Assigning " + currNumber + " to customer " + DMV.customerAtInfoDesk);
-                DMV.customerNumber[DMV.customerAtInfoDesk] = currNumber;
-                // Increment the current number for the next customer
-                DMV.customerNumber[currNumber] = DMV.customerAtInfoDesk;
                 currNumber++;
-
                 // Inform customer that the transaction has completed
                 DMV.infoDeskComplete.release();
-                if(currNumber > 21){System.exit(0);}
             }
         } catch (InterruptedException e){
             System.out.println("Information desk failed. " + e);

@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.Semaphore;
 
 // Main class that handles all transactions, holds semaphores, etc.
@@ -18,18 +20,14 @@ public class DMV {
     public static Semaphore informationDeskReady = new Semaphore(0,true);
     public static Semaphore customerInfoDeskReady = new Semaphore(0,true);
     public static Semaphore infoDeskComplete = new Semaphore(0,true);
-    // customerNumber is used to attach a customer's number to their id 
-    //  (customer 1's number will be stored in customerNumber[1])
-    // customerAtInfoDesk points to which customer is currently at the Information Desk
-    //  Stored as "[0, 13, 14....., 3]" where Customer 1 is #13, Customer 2 is #14, etc.
-    public static int[] customerNumber = new int[21];
-    public static int customerAtInfoDesk;
-    
+    public static Queue<Customer> infoDeskLine = new LinkedList<>();
+        
     // Waiting area Semaphore displays
     public static Semaphore waitingAreaReady = new Semaphore(3,true);
     public static Semaphore customerWaitingAreaReady = new Semaphore(0,true);
     public static Semaphore waitingAreaComplete = new Semaphore(0,true);
     public static int waitingAreaNumber = 1;
+    public static Queue<Customer> waitingAreaLine = new LinkedList<>();
 
     // Agent Semahpores
     public static Semaphore agentReady = new Semaphore(0,true);
@@ -39,6 +37,11 @@ public class DMV {
     };
     public static Semaphore customerAgentReady = new Semaphore(0,true);
     public static Semaphore agentComplete = new Semaphore(0, true);
+    public static Queue<Customer> agentLine = new LinkedList<>();
+
+    public static Semaphore photoEyeExamInstruction = new Semaphore(0, true);
+    public static Semaphore photoEyeExamComplete = new Semaphore(0, true);
+    public static Semaphore licenseSemaphore = new Semaphore(0,true);
 
 
     public static void main(String[] args){
@@ -81,7 +84,6 @@ public class DMV {
             custom.start();
         }
 
-        /*
         for(int i = 1; i <= 20; i++){
             try {
                 customerArr[i].join();
@@ -89,7 +91,7 @@ public class DMV {
                 e.printStackTrace();
             }
         }
-        */
+
 
         /*
         infoDesk.interrupt(); 
@@ -101,5 +103,7 @@ public class DMV {
             customerArr[i].interrupt(); 
         }
         */
+
+        System.out.println("Done.");
     }
 }

@@ -1,8 +1,9 @@
-// Used to simulate waiting times
+import java.lang.Math;
 import java.util.Random;
 
 public class Customer implements Runnable {
 
+    private Random random = new Random();
     public int customerId;
     /*
      * Stores value of customer id in thread
@@ -23,57 +24,74 @@ public class Customer implements Runnable {
          *  gives the Information Desk, Announcer, and Agent threads time to start.
          */
         try {
-            Thread.sleep(1000);
+            Thread.sleep((long) (Math.random() * (2000 - 1000 + 1) + 1000));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         System.out.println("Customer " + customerId + " created, enters DMV.");
-
-        /*
-         * Information Desk transaction in try/catch block below.
-         */
         try{
+            // Customer "walks" to Information Desk line
+            try {
+                Thread.sleep((long) (Math.random() * (2000 - 1000 + 1) + 1000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            
+            // Customer begins to wait in Information Desk line
+            DMV.infoDeskLine.add(this);
             // Inform the Information Desk that a customer is ready for the transaction
             DMV.customerInfoDeskReady.release();
-
-            // Customer proceeds to information d esk
+            // Customer proceeds to information desk
             DMV.informationDeskReady.acquire();
-            System.out.println(customerId + " goes to information desk.");
 
-            // Inform the information desk which customer is currently there
-            DMV.customerAtInfoDesk = customerId;
             // Customer waits until Information desk transaction has completed
             DMV.infoDeskComplete.acquire();
 
+            // Customer "walks" to Waiting Area Line
+            try {
+                Thread.sleep((long) (Math.random() * (2000 - 1000 + 1) + 1000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             // Starting at Waiting Area
 
+            // Customer approaches waiting area for Announcer
+            DMV.waitingAreaLine.add(this);
             DMV.customerWaitingAreaReady.release();
-            while(customerId != DMV.customerNumber[DMV.waitingAreaNumber]){
-                Thread.sleep(1000);
-            }
             DMV.waitingAreaReady.acquire();
+
+            // Customer "walks" to Waiting Area Line
+            try {
+                Thread.sleep((long) (Math.random() * (2000 - 1000 + 1) + 1000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             // Customer waits for Agent to be ready.
-            // DMV.agentReady.acquire();
-
-            DMV.agentReady.acquire();
-            System.out.println("Customer " + customerId + ":AgentReady ACQUIRE");
-            DMV.waitingAreaComplete.release();
+            DMV.agentLine.add(this);
+            DMV.waitingAreaComplete.acquire();
+            System.out.println("gets here");
             DMV.customerAgentReady.release();
+            DMV.agentReady.acquire();
 
+            System.out.println("gets here 2");
             int agent;
-            if(DMV.agentSemaphore[0].tryAcquire()){
+            if(random.nextBoolean()){
+                DMV.agentSemaphore[0].acquire();
                 agent = 0;
             } else {
                 DMV.agentSemaphore[1].acquire();
                 agent = 1;
             }
-
-            System.out.println("Agent " + agent + " serving customer " + customerId);
-            System.out.println("Agent " + agent + " asks customer " + customerId + " to take photo and eye exam.");
+            
+            System.out.println("gets here 3");
+            DMV.photoEyeExamInstruction.acquire();
             System.out.println("Customer " + customerId + " completes photo and eye exam.");
+            DMV.photoEyeExamComplete.release();
             System.out.println("Customer " + customerId + " gets license and departs.");
-
+            DMV.licenseSemaphore.acquire();
+            DMV.agentSemaphore[agent].release();
             DMV.agentComplete.acquire();
         } catch (InterruptedException e){
             System.out.println("Customer failed at Information Desk stage. " + e);
