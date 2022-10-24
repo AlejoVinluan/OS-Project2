@@ -25,9 +25,14 @@ public class Agent implements Runnable{
                 System.out.println("Agent " + id + " asks customer " + currCustomer.getId() + " to take photo and eye exam.");
                 DMV.photoEyeExamInstruction.release();
                 DMV.photoEyeExamComplete.acquire();
+                // Agent processes and creates license
+                try {
+                    Thread.sleep((long) (Math.random() * (2000 - 1000 + 1) + 1000));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 DMV.licenseSemaphore.release();
                 DMV.agentComplete.release();
-                System.out.println("Customer " + id + " joined.");
             }
         } catch (InterruptedException e){
             System.out.println("Agent failed. " + e);

@@ -88,11 +88,19 @@ public class Customer implements Runnable {
             System.out.println("gets here 3");
             DMV.photoEyeExamInstruction.acquire();
             System.out.println("Customer " + customerId + " completes photo and eye exam.");
+            // Customer completes photo and eye exam
+            try {
+                Thread.sleep((long) (Math.random() * (2000 - 1000 + 1) + 1000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             DMV.photoEyeExamComplete.release();
             System.out.println("Customer " + customerId + " gets license and departs.");
             DMV.licenseSemaphore.acquire();
             DMV.agentSemaphore[agent].release();
             DMV.agentComplete.acquire();
+            DMV.joinedSemaphore[customerId].acquire();
+            System.out.println("Customer " + customerId + " was joined.");
         } catch (InterruptedException e){
             System.out.println("Customer failed at Information Desk stage. " + e);
         }

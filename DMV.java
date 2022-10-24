@@ -43,6 +43,7 @@ public class DMV {
     public static Semaphore photoEyeExamComplete = new Semaphore(0, true);
     public static Semaphore licenseSemaphore = new Semaphore(0,true);
 
+    public static Semaphore[] joinedSemaphore = new Semaphore[21];
 
     public static void main(String[] args){
         // Creates Information Desk Runnable Object
@@ -77,6 +78,7 @@ public class DMV {
         customerArr = new Thread[21];
         for(int i = 1; i <= 20; i++){
             // Creates customer object, storing Id "i" for customer
+            joinedSemaphore[i] = new Semaphore(0,true);
             Customer cust = new Customer(i);
             Thread custom = new Thread(cust);
             // Stores customer with ID in customer array
@@ -86,6 +88,7 @@ public class DMV {
 
         for(int i = 1; i <= 20; i++){
             try {
+                joinedSemaphore[i].release();
                 customerArr[i].join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
