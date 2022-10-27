@@ -9,6 +9,15 @@ public class DMV {
     private static Thread[] customerArr;
 
     /*
+     * Each boolean is used to stop the threads once all of the transactions have been completed.
+     * This occurs after all customer threads confirm they have completed (via join)
+     */
+    public static boolean infoDeskRunning = true;
+    public static boolean announcerRunning = true;
+    public static boolean agentZeroRunning = true;
+    public static boolean agentOneRunning = true;
+
+    /*
      * Semaphores
      *  - 1st parameter is the default number of Semaphores available
      *  - 2nd parameter is a boolean to allow Threads to acquire semaphores in FIFO manner
@@ -22,7 +31,11 @@ public class DMV {
     public static Semaphore infoDeskComplete = new Semaphore(0,true);
     public static Queue<Customer> infoDeskLine = new LinkedList<>();
         
-    // Waiting area Semaphore displays
+    // waitingAreaReady will be used to inform customers that waiting area is ready
+    // customerWaitingAreaReady is used to inform waitingArea that customer is ready
+    // waitingAreaComplete is used to tell customers that waitingArea has completed
+    // waitingAreaNumber is the number currently being served
+    // waitingAreaLine is a Queue data structure of Customers that simulates the line at waitingArea
     public static Semaphore waitingAreaReady = new Semaphore(3,true);
     public static Semaphore customerWaitingAreaReady = new Semaphore(0,true);
     public static Semaphore waitingAreaComplete = new Semaphore(0,true);
@@ -30,6 +43,11 @@ public class DMV {
     public static Queue<Customer> waitingAreaLine = new LinkedList<>();
 
     // Agent Semahpores
+    // agentReady is used to inform customers that agent is ready
+    // agentSemaphore[] used to show which agent is currently ready
+    // customerAgentReady informs Agent that customer is ready
+    // agentComplete infoms Customer that Agent has completed transaction
+    // agentLine is a queue data structure that allows Customers to form a queue to see agent
     public static Semaphore agentReady = new Semaphore(0,true);
     public static Semaphore[] agentSemaphore = new Semaphore[]{
         new Semaphore(0,true),
@@ -39,10 +57,14 @@ public class DMV {
     public static Semaphore agentComplete = new Semaphore(0, true);
     public static Queue<Customer> agentLine = new LinkedList<>();
 
+    // photoEyeExamInstruction is used to signal Customers the instructions from Agent
+    // photoEyeExamComplete is used to inform Agents that customers have completed their Photo/Eye exam
+    // licenseSemaphore is used so Customers can wait to receive their license from their Agents
     public static Semaphore photoEyeExamInstruction = new Semaphore(0, true);
     public static Semaphore photoEyeExamComplete = new Semaphore(0, true);
     public static Semaphore licenseSemaphore = new Semaphore(0,true);
 
+    // joinedSempahore is used to confirm each customer thread has been joined.
     public static Semaphore[] joinedSemaphore = new Semaphore[21];
 
     public static void main(String[] args){
@@ -86,6 +108,9 @@ public class DMV {
             custom.start();
         }
 
+        /*
+         * Join each customer thread
+         */
         for(int i = 1; i <= 20; i++){
             try {
                 joinedSemaphore[i].release();
@@ -95,17 +120,14 @@ public class DMV {
             }
         }
 
-
         /*
-        infoDesk.interrupt(); 
-        announce.interrupt();
-        agentZero.interrupt();
-        agentOne.interrupt();
-
-        for(int i = 1; i <= 20; i++){
-            customerArr[i].interrupt(); 
-        }
-        */
+         * Once all customer threaeds have been joined, shut off the remaining threads
+         *  by breaking their while(true) loops.
+         */
+        infoDeskRunning = false;
+        announcerRunning = false;
+        agentZeroRunning = false;
+        agentOneRunning = false;
 
         System.out.println("Done.");
     }

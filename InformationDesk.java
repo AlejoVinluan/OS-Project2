@@ -11,13 +11,13 @@ public class InformationDesk implements Runnable{
     @Override
     public void run(){
         try{
-            boolean infoDeskOpen = true;
-            while(infoDeskOpen){
+            while(DMV.infoDeskRunning){
                 // Information Desk announces they're ready
                 DMV.informationDeskReady.release();
                 // Information Desk takes next customer in line
                 DMV.customerInfoDeskReady.acquire();
                 
+                // Choose the first customer located in the information desk
                 Customer currCustomer = DMV.infoDeskLine.remove();
                 System.out.println("Customer " + currCustomer.getId() + " gets number " + currNumber + ", enters waiting room");
                 

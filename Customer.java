@@ -70,12 +70,17 @@ public class Customer implements Runnable {
             }
             // Customer waits for Agent to be ready.
             DMV.agentLine.add(this);
+            // Custoemr waits until the waiting area is done serving customer
             DMV.waitingAreaComplete.acquire();
-            System.out.println("gets here");
+            // Customer informs agent they are ready for the transaction.
             DMV.customerAgentReady.release();
+            // Customer waits until the agent is ready before proceeding
             DMV.agentReady.acquire();
 
-            System.out.println("gets here 2");
+
+            /*
+             * Customer will randomly choose between both agents before proceeding.
+             */
             int agent;
             if(random.nextBoolean()){
                 DMV.agentSemaphore[0].acquire();
@@ -85,7 +90,7 @@ public class Customer implements Runnable {
                 agent = 1;
             }
             
-            System.out.println("gets here 3");
+            // Customer waits for their instruction on how to complete photo and eye exam.
             DMV.photoEyeExamInstruction.acquire();
             System.out.println("Customer " + customerId + " completes photo and eye exam.");
             // Customer completes photo and eye exam
@@ -94,11 +99,16 @@ public class Customer implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            // Customer informs Agent that they have completed the photo and eye exam.
             DMV.photoEyeExamComplete.release();
             System.out.println("Customer " + customerId + " gets license and departs.");
+            // Customer waits until their license is ready from the agent.
             DMV.licenseSemaphore.acquire();
+            // Customer is completed with agent.
             DMV.agentSemaphore[agent].release();
+            // Customer waits until the agent confirms they are done with transaction.
             DMV.agentComplete.acquire();
+            // Customer waits until they are joined.
             DMV.joinedSemaphore[customerId].acquire();
             System.out.println("Customer " + customerId + " was joined.");
         } catch (InterruptedException e){
